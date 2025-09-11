@@ -16,6 +16,7 @@ exports.sendTestEmail = exports.transporter = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+// ✅ ENV check
 if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
     console.error("❌ Missing EMAIL_USER or EMAIL_PASS in .env file");
 }
@@ -29,14 +30,22 @@ const transporter = nodemailer_1.default.createTransport({
     },
 });
 exports.transporter = transporter;
+// ✅ Send mail function
 const sendTestEmail = (name, senderMail, phone, subject, message) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const info = yield transporter.sendMail({
-            from: `"${name}" <${senderMail}>`,
-            to: process.env.SMTP_MAIL_RECEIVER || process.env.EMAIL_USER,
-            subject: subject,
+            from: process.env.EMAIL_USER,
+            replyTo: senderMail,
+            to: process.env.SMTP_MAIL_RECEIVER,
+            // to: [
+            //   // "themahendra001@gmail.com",
+            //   // "support@you-pi.in",
+            //   "princekumarsingh167@gmail.com"
+            // ],
+            subject: subject || "New Contact Form Submission",
             text: `Name: ${name}\nEmail: ${senderMail}\nPhone: ${phone}\nMessage: ${message}`,
             html: `
+        <h2>📩 New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${senderMail}</p>
         <p><strong>Phone:</strong> ${phone}</p>
@@ -48,6 +57,7 @@ const sendTestEmail = (name, senderMail, phone, subject, message) => __awaiter(v
     }
     catch (error) {
         console.error("❌ Error sending email:", error);
+        throw error;
     }
 });
 exports.sendTestEmail = sendTestEmail;

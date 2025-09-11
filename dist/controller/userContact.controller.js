@@ -14,14 +14,15 @@ const sendMail_1 = require("../utils/sendMail");
 const createUserContact = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, phone, subject, message } = req.body;
-        // Validate all fields
+        // ✅ Validate all fields
         if (!name || !email || !phone || !subject || !message) {
             res.status(400).json({ error: "All fields are required." });
+            return; // stop execution here
         }
-        // Send email via Nodemailer, including phone
-        console.log("Phone type:", typeof phone); // keep phone logging for debugging
+        // ✅ Send email via Nodemailer (with phone included)
+        console.log("Phone received:", phone);
         yield (0, sendMail_1.sendTestEmail)(name, email, phone, subject, message);
-        // Respond success
+        // ✅ Success response
         res.status(201).json({
             success: true,
             message: "Email sent successfully.",
