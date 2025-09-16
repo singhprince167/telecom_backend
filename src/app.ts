@@ -8,7 +8,7 @@ const app = express();
 
 // Enable CORS for frontend
 app.use(cors({
-    origin: process.env.FRONTEND_URL_PROD || "http://localhost:5173",
+    origin: ["https://web-frontend-lemon-gamma.vercel.app/","http://localhost:5173"],
     methods: ["GET", "POST","PUT","PATCH","DELETE"],
     credentials: true
 }));
